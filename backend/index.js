@@ -1,12 +1,9 @@
 import express from 'express';
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-const port = process.env.PORT || 3000;
+const port =  3000;
 
 app.listen(port, (err) => {
   if (err) {
@@ -15,6 +12,10 @@ app.listen(port, (err) => {
   };
 
   console.log(`Servidor rodando em: http://localhost:${port}`);
+});
+
+app.get('/', (req, res) => {
+  res.json({ message: "Hello world!" });
 });
 
 export default app;
