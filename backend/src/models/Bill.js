@@ -1,5 +1,6 @@
 class Bill {
-    id; 
+    id;
+    amount;
     description
     due_date;
     payment_date;
@@ -10,6 +11,7 @@ class Bill {
 
     constructor(data) {
         this.id = data.id;
+        this.amount = data.amount
         this.description = data.description || "";
         this.due_date = data.due_date || null;
         this.payment_date = data.payment_date || null;
@@ -21,6 +23,10 @@ class Bill {
 
     get_id() {
         return this.id;
+    }
+
+    get_amount() {
+        return this.amount;
     }
 
     get_description() {
@@ -49,6 +55,10 @@ class Bill {
 
     get_user_id() {
         return this.user_id;
+    }
+
+    set_amount(amount) {
+        this.amount = amount;
     }
 
     set_description(description) {

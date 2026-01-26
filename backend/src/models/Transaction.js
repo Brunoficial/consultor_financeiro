@@ -2,17 +2,17 @@ class Transaction {
     id; 
     description;
     date;
-    value;
+    amount;
     type;
     category;
     account_type; 
     user_id;
 
-    constructor(id, description, date, value, type, category, account_type, user_id) {
+    constructor(id, description, date, amount, type, category, account_type, user_id) {
         this.id = id;
         this.description = description;
         this.date = date;
-        this.value = value;
+        this.amount = amount;
         this.type = type;
         this.category = category;
         this.account_type = account_type;
@@ -31,8 +31,8 @@ class Transaction {
         return this.date;
     }
 
-    get_value() {
-        return this.value;
+    get_amount() {
+        return this.amount;
     }
 
     get_type() {
@@ -59,8 +59,8 @@ class Transaction {
         this.date = date;
     }
 
-    set_value(value) {
-        this.value = value;
+    set_amount(amount) {
+        this.amount = amount;
     }
 
     set_type(type) {
