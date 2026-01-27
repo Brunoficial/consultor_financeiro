@@ -1,6 +1,11 @@
 import express from 'express';
+import AuthRoutes from './src/routes/AuthRoutes.js';
+import dotenv from 'dotenv';
+
 
 const app = express();
+dotenv.config();
+
 app.use(express.json());
 
 const port =  3000;
@@ -17,5 +22,8 @@ app.listen(port, (err) => {
 app.get('/', (req, res) => {
   res.json({ message: "Hello world!" });
 });
+
+app.use('/auth', AuthRoutes);
+
 
 export default app;
