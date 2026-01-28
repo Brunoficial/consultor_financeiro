@@ -27,9 +27,9 @@ class AuthService {
         expiresIn: "1d",
       });
 
-      return res.json({ token });
+      return res.json({ token: token });
+
     } catch (error) {
-      console.error("Erro ao realizar login:", error);
       return res.status(500).json({ message: "Erro interno do servidor." });
     }
   }
@@ -39,7 +39,7 @@ class AuthService {
 
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = await this.UserRepository.create({
+      await this.UserRepository.create({
         name,
         email,
         password: hashedPassword,
