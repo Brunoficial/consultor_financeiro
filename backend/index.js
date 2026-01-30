@@ -1,6 +1,7 @@
 import express from 'express';
 import userRouter from './src/routes/UserRouter.js';
 import transactionRouter from './src/routes/TransactionRouter.js';
+import billRouter from './src/routes/BillRouter.js';
 import dotenv from 'dotenv';
 
 
@@ -22,5 +23,6 @@ app.listen(port, (err) => {
 
 app.use('/user', userRouter);
 app.use('/transactions', transactionRouter);
+app.use('/bills', billRouter);
 
 export default app;

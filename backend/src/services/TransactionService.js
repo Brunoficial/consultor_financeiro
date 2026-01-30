@@ -8,56 +8,75 @@ class TransactionService {
     async getAllUserTransactions(id) {
         try {
             const userId = id
-            const transactions = await this.transactionRepository.get_all_user_transactions(userId);
+            const transactions = await this.transactionRepository.getAllByUserId(userId);
             return {status: 200, data: transactions}
         } catch (error) {
+            console.log(error)
             return { status: 500, message: "Erro interno no servidor " };
         }
     }
 
-    async createTransaction(data) {
+    async getByTransactionById(id) {
         try {
-            const transaction = await this.transactionRepository.create_transaction(data);
-            return { status: 201, data: transaction };
+            const transaction = await this.transactionRepository.findById(id);
+            if (!transaction) {
+                return { status: 404, message: "Transação não encontrada" };
+            }
+            return { status: 200, data: transaction };
         } catch (error) {
+            console.log(error);
+            return { status: 500, message: "Erro interno no servidor" };
+        }
+    }
+
+    async createTransaction(body) {
+        try {
+            const data = await this.transactionRepository.create(body);
+            return { status: 200, message: "Transação criada com sucesso" };
+        } catch (error) {
+            console.log(error)
             return { status: 500, message: "Erro interno no servidor" };
         }
     }
 
     async editTransaction(id, data) {
         try {
-            const transaction = await this.transactionRepository.get_transaction_by_id(id);
+            const transaction = await this.transactionRepository.findById(id);
 
             if (!transaction) {
-                return { status: 404, message: "Transaction not found" };
+                return { status: 404, message: "Transição não encontrada" };
             }
 
             if (transaction.user_id !== data.user_id) {
-                return { status: 403, message: "Unauthorized" };
+                return { status: 403, message: "Sem autorização" };
             }
 
-            transaction = await this.transactionRepository.edit_transaction(id, data);
-            return { status: 200, data: transaction };
+            await this.transactionRepository.edit(id, data);
+            return { status: 200, message: "Transação editada com sucesso" };
         } catch (error) {
+            console.log(error)
             return { status: 500, message: "Erro interno no servidor" };
         }
     }
 
     async deleteTransaction(id) {
         try {
-            const transaction = await this.transactionRepository.get_transaction_by_id(id);
+            const transaction = await this.transactionRepository.findById(id);
             if (!transaction) {
-                return { status: 404, message: "Transaction not found" };
+                return { status: 404, message: "Transição não encontrada" };
             }
 
+            /*
             if (transaction.user_id !== user_id) {
-                return { status: 403, message: "Unauthorized" };
-            }
+                return { status: 403, message: "Sem autorização" };
+            } 
+            */
 
-            await this.transactionRepository.delete_transaction(id);
-            return { status: 200, message: "Transaction deleted successfully" };
+            await this.transactionRepository.delete(id);
+            return { status: 200, message: "Transação deletada com sucesso" };
         } catch (error) {
-            return { status: 500, message: "Failed to delete transaction" };
+            console.log(error)
+            return { status: 500, message: "Erro interno no servidor" };
         }
     }}
 export default TransactionService

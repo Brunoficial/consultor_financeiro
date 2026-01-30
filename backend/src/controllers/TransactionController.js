@@ -11,6 +11,12 @@ class TransactionController {
         return res.status(result.status).json(result);
     }
 
+    async getByTransactionById(req, res) {
+        const transactionId = req.params.id;
+        const result = await this.transactionService.getByTransactionById(transactionId);
+        return res.status(result.status).json(result);
+    }
+
     async createTransaction(req, res) {
         const transactionData = req.body;
         const result = await this.transactionService.createTransaction(transactionData);

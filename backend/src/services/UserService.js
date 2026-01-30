@@ -50,6 +50,7 @@ class UserService {
 
       return {status: 200, data: newUser, message: "Usuário registrado com sucesso"}
     } catch (error) {
+      console.log(error)
       return {status: 500, message: "Erro interno ocorreu no servidor"}
     }
   }
@@ -63,6 +64,7 @@ class UserService {
 
       return {status:200, data: user}
     } catch(error) {
+      console.log(error)
       return {status:500, message: "Erro interno no servidor"}
     }
   } 
