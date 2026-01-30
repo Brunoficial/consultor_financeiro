@@ -1,6 +1,6 @@
 import express from 'express';
-import AuthRoutes from './src/routes/AuthRoutes.js';
-import TransactionRoutes from './src/routes/TransactionRoutes.js';
+import userRouter from './src/routes/UserRouter.js';
+import transactionRouter from './src/routes/TransactionRouter.js';
 import dotenv from 'dotenv';
 
 
@@ -20,7 +20,7 @@ app.listen(port, (err) => {
   console.log(`Servidor rodando em: http://localhost:${port}`);
 });
 
-app.use('/auth', AuthRoutes);
-app.use('/transactions', TransactionRoutes);
+app.use('/user', userRouter);
+app.use('/transactions', transactionRouter);
 
 export default app;

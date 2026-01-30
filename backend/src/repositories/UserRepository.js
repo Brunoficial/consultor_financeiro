@@ -3,6 +3,11 @@ class UserRepository {
         this.db = db;
     }
 
+    async findById(id) {
+        const [rows] = await this.db.execute("SELECT * FROM user WHERE id = ?", [id])
+        return rows[0]
+    }
+
     async findByEmail(email) {
         const [rows] = await this.db.execute("SELECT * FROM users WHERE email = ?", [email]);
         return rows[0];

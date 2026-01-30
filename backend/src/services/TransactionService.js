@@ -5,58 +5,59 @@ class TransactionService {
         this.transactionRepository = new TransactionRepository(db);
     }
 
-    async getAllUserTransactions(req, res) {
-        const userId = req.body.user_id;
-        const transactions = await this.transactionRepository.get_all_user_transactions(userId);
-        return res.status(200).json(transactions);
-    }
-
-    async createTransaction(req, res) {
-        const data = req.body;
-
-        const transaction = await this.transactionRepository.create_transaction(data);
-        return json({ message: "Transaction created successfully", transaction });
-    }
-
-    async editTransaction(req, res) {
-        const { id } = req.params;
-        const data = req.body;
-
-        const transaction = await this.transactionRepository.get_transaction_by_id(id);
-
-        if (!transaction) {
-            return res.status(404).json({ message: "Transaction not found" });
-        }
-
-        if (transaction.user_id !== data.user_id) {
-            return res.status(403).json({ message: "Unauthorized" });
-        }
-
-        return await this.transactionRepository.edit_transaction(id, data);
-    }
-
-    async deleteTransaction(req, res) {
-        const { id } = req.params;
-        const { user_id } = req.body;
-
-        const transaction = await this.transactionRepository.get_transaction_by_id(id);
-
+    async getAllUserTransactions(id) {
         try {
+            const userId = id
+            const transactions = await this.transactionRepository.get_all_user_transactions(userId);
+            return {status: 200, data: transactions}
+        } catch (error) {
+            return { status: 500, message: "Erro interno no servidor " };
+        }
+    }
+
+    async createTransaction(data) {
+        try {
+            const transaction = await this.transactionRepository.create_transaction(data);
+            return { status: 201, data: transaction };
+        } catch (error) {
+            return { status: 500, message: "Erro interno no servidor" };
+        }
+    }
+
+    async editTransaction(id, data) {
+        try {
+            const transaction = await this.transactionRepository.get_transaction_by_id(id);
+
             if (!transaction) {
-                return res.status(404).json({ message: "Transaction not found" });
+                return { status: 404, message: "Transaction not found" };
+            }
+
+            if (transaction.user_id !== data.user_id) {
+                return { status: 403, message: "Unauthorized" };
+            }
+
+            transaction = await this.transactionRepository.edit_transaction(id, data);
+            return { status: 200, data: transaction };
+        } catch (error) {
+            return { status: 500, message: "Erro interno no servidor" };
+        }
+    }
+
+    async deleteTransaction(id) {
+        try {
+            const transaction = await this.transactionRepository.get_transaction_by_id(id);
+            if (!transaction) {
+                return { status: 404, message: "Transaction not found" };
             }
 
             if (transaction.user_id !== user_id) {
-                return res.status(403).json({ message: "Unauthorized" });
+                return { status: 403, message: "Unauthorized" };
             }
 
-            if (await this.transactionRepository.delete_transaction(id)) {
-                return { message: "Transaction deleted successfully" };
-            } else {
-                return res.status(500).json({ message: "Failed to delete transaction" });
-            }
+            await this.transactionRepository.delete_transaction(id);
+            return { status: 200, message: "Transaction deleted successfully" };
         } catch (error) {
-            return res.status(500).json({ message: "Failed to delete transaction" });
+            return { status: 500, message: "Failed to delete transaction" };
         }
     }}
 export default TransactionService
